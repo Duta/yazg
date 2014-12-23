@@ -15,16 +15,8 @@ public final class Entities {
         return enemy(basic());
     }
 
-    public static Entity sized() {
-        return sized(basic());
-    }
-
-    public static Entity rotatable() {
-        return rotatable(basic());
-    }
-
-    public static Entity renderable() {
-        return renderable(basic());
+    public static Entity sprite() {
+        return sprite(basic());
     }
 
     // Modify entities
@@ -34,19 +26,9 @@ public final class Entities {
                 .add(new EnemyComponent());
     }
 
-    public static Entity sized(Entity entity) {
-        return entity
-                .add(new SizeComponent());
-    }
 
-    public static Entity rotatable(Entity entity) {
+    public static Entity sprite(Entity entity) {
         return entity
-                .add(new RotationComponent());
-    }
-
-    public static Entity renderable(Entity entity) {
-        return entity
-                .add(new PositionComponent())
-                .add(new TextureComponent());
+                .add(new SpriteComponent());
     }
 }

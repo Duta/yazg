@@ -8,37 +8,29 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import static com.duta.yazg.Entities.*;
 
 public class GameScreen extends ScreenAdapter {
     private YAZG game;
-    private Texture img;
     private Engine engine;
     private Entity player;
-    private Family renderables, enemies;
+    private Family sprites, enemies;
     private OrthographicCamera cam;
 
     public GameScreen(YAZG game) {
         this.game = game;
 
-        img = game.assets.get("enemy.png");
         engine = new Engine();
-        player = sized(rotatable(renderable()));
-        renderables = Family.all(PositionComponent.class, TextureComponent.class).get();
+        player = sprite();
+        sprites = Family.all(SpriteComponent.class).get();
         enemies = Family.all(EnemyComponent.class).get();
         cam = new OrthographicCamera();
 
-        PositionComponent position = Mappers.position.get(player);
-        position.x = 50f;
-        position.y = 50f;
-
-        TextureComponent texture = Mappers.texture.get(player);
-        texture.texture = game.assets.get("player.png");
-
-        SizeComponent size = Mappers.size.get(player);
-        size.width  = 32f;
-        size.height = 32f;
+        SpriteComponent sprite = Mappers.sprite.get(player);
+        sprite.sprite = new Sprite(game.assets.<Texture>get("player.png"));
+        sprite.sprite.setBounds(50f, 50f, 32f, 32f);
 
         engine.addEntity(player);
 
@@ -58,58 +50,15 @@ public class GameScreen extends ScreenAdapter {
 
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
-        for(Entity entity : engine.getEntitiesFor(renderables)) {
-            Texture texture;
-            float x, y, width, height, rotation;
-
-            PositionComponent positionComp = Mappers.position.get(entity);
-            x = positionComp.x;
-            y = positionComp.y;
-
-            TextureComponent textureComp = Mappers.texture.get(entity);
-            texture = textureComp.texture;
-
-            if(Mappers.size.has(entity)) {
-                SizeComponent sizeComp = Mappers.size.get(entity);
-                width  = sizeComp.width;
-                height = sizeComp.height;
-            } else {
-                width  = textureComp.texture.getWidth();
-                height = textureComp.texture.getHeight();
-            }
-            if(Mappers.rotation.has(entity)) {
-                RotationComponent rotationComp = Mappers.rotation.get(entity);
-                rotation = rotationComp.rotation;
-            } else {
-                rotation = 0f;
-            }
-
-            game.batch.draw(
-                    texture,             // Texture
-                    x,                   // X
-                    y,                   // Y
-                    x +  width/2,        // Origin X
-                    y + height/2,        // Origin Y
-                    width,               // Width
-                    height,              // Height
-                    1f,                  // Scale X
-                    1f,                  // Scale Y
-                    rotation,            // Rotation
-                    0,                   // Source X
-                    0,                   // Source Y
-                    texture.getWidth(),  // Source Width
-                    texture.getHeight(), // Source Height
-                    false,               // Flip X?
-                    false                // Flip Y?
-            );
+        for(Entity entity : engine.getEntitiesFor(sprites)) {
+            Mappers.sprite.get(entity).sprite.draw(game.batch);
         }
         game.batch.end();
     }
 
     private void centerCamera() {
-        PositionComponent position = Mappers.position.get(player);
-        SizeComponent     size     = Mappers.size    .get(player);
-        cam.position.set(position.x + size.width/2, position.y + size.height/2, 0);
+        Sprite sprite = Mappers.sprite.get(player).sprite;
+        cam.position.set(sprite.getX() + sprite.getWidth()/2, sprite.getY() + sprite.getHeight()/2, 0);
     }
 
     private void update() {
@@ -118,22 +67,16 @@ public class GameScreen extends ScreenAdapter {
             game.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             cam.unproject(game.touch);
 
-            Entity enemy = sized(rotatable(renderable(enemy())));
+            Entity enemy = enemy(sprite());
 
-            PositionComponent position = Mappers.position.get(enemy);
-            position.x = game.touch.x;
-            position.y = game.touch.y;
-
-            TextureComponent texture = Mappers.texture.get(enemy);
-            texture.texture = img;
-
-            SizeComponent size = Mappers.size.get(enemy);
-            size.width  = 32f;
-            size.height = 32f;
+            SpriteComponent sprite = Mappers.sprite.get(enemy);
+            sprite.sprite = new Sprite(game.assets.<Texture>get("enemy.png"));
+            sprite.sprite.setBounds(game.touch.x, game.touch.y, 32f, 32f);
 
             engine.addEntity(enemy);
         }
         for(Entity entity : engine.getEntitiesFor(enemies)) {
+            Sprite sprite = Mappers.sprite.get(entity).sprite;
             // TODO: Face player
         }
     }
