@@ -13,7 +13,7 @@ public class GameScreen extends ScreenAdapter {
     private YAZG game;
     private Texture img;
     private Engine engine;
-//    private Entity player;
+    private Entity player;
     private Family renderable;
     private OrthographicCamera cam;
 
@@ -22,15 +22,31 @@ public class GameScreen extends ScreenAdapter {
 
         img = game.assets.get("enemy.png");
         engine = new Engine();
-//        player = Entities.sized(Entities.renderable());
+        player = Entities.sized(Entities.renderable());
         renderable = Family.all(PositionComponent.class, TextureComponent.class).get();
         cam = new OrthographicCamera();
+
+        PositionComponent position = Mappers.position.get(player);
+        position.x = 50f;
+        position.y = 50f;
+
+        TextureComponent texture = Mappers.texture.get(player);
+        texture.texture = game.assets.get("player.png");
+
+        SizeComponent size = Mappers.size.get(player);
+        size.width  = 32f;
+        size.height = 32f;
+
+        engine.addEntity(player);
+
         cam.setToOrtho(false, game.width, game.height);
     }
 
     @Override
     public void render(float delta) {
         update();
+
+        centerCamera();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -42,6 +58,7 @@ public class GameScreen extends ScreenAdapter {
         for(Entity entity : engine.getEntitiesFor(renderable)) {
             PositionComponent position = Mappers.position.get(entity);
             TextureComponent  texture  = Mappers.texture .get(entity);
+            Gdx.app.log("Render", position.x+","+position.y);
             if(Mappers.size.has(entity)) {
                 SizeComponent size = Mappers.size.get(entity);
                 game.batch.draw(texture.texture, position.x, position.y, size.width, size.height);
@@ -50,6 +67,12 @@ public class GameScreen extends ScreenAdapter {
             }
         }
         game.batch.end();
+    }
+
+    private void centerCamera() {
+        PositionComponent position = Mappers.position.get(player);
+        SizeComponent     size     = Mappers.size    .get(player);
+        cam.position.set(position.x + size.width /2, position.y + size.height/2, 0);
     }
 
     private void update() {
@@ -70,6 +93,8 @@ public class GameScreen extends ScreenAdapter {
             SizeComponent size = Mappers.size.get(enemy);
             size.width  = 32f;
             size.height = 32f;
+
+            Gdx.app.log("Enemy spawn", position.x+","+position.y);
 
             engine.addEntity(enemy);
         }

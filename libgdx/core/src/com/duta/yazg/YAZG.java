@@ -20,6 +20,7 @@ public class YAZG extends Game {
 		touch = new Vector3();
 		assets = new AssetManager();
 		assets.load("enemy.png", Texture.class);
+		assets.load("player.png", Texture.class);
 		setScreen(new LoadingScreen(this));
 	}
 
