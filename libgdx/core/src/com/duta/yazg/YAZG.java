@@ -25,7 +25,7 @@ public class YAZG extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		engine = new Engine();
 		img = new Texture("badlogic.jpg");
-		renderable = Family.getFor(PositionComponent.class);
+		renderable = Family.all(PositionComponent.class, TextureComponent.class).get();
 	}
 
 	@Override
@@ -46,6 +46,8 @@ public class YAZG extends ApplicationAdapter {
 			PositionComponent position = Mappers.position.get(enemy);
 			position.x = Gdx.input.getX();
 			position.y = Gdx.input.getY();
+			TextureComponent texture = Mappers.texture.get(enemy);
+			texture.texture = img;
 			engine.addEntity(enemy);
 		}
 	}
@@ -58,14 +60,11 @@ public class YAZG extends ApplicationAdapter {
 
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
-		ImmutableArray<Entity> entities = engine.getEntitiesFor(renderable);
-		for(int i = 0; i < entities.size(); i++) {
-			PositionComponent position = Mappers.position.get(entities.get(i));
-			batch.draw(img, position.x, position.y, 32, 32);
+		for(Entity entity : engine.getEntitiesFor(renderable)) {
+			PositionComponent position = Mappers.position.get(entity);
+			TextureComponent  texture  = Mappers.texture .get(entity);
+			batch.draw(texture.texture, position.x, position.y, 32, 32);
 		}
-//		for(Vector2 enemyPosition : enemyPositions) {
-//			batch.draw(img, enemyPosition.x, enemyPosition.y, 16, 16);
-//		}
 		batch.end();
 	}
 }
