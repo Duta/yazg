@@ -20,7 +20,7 @@ public class GameScreen extends ScreenAdapter {
         this.game = game;
 
         engine = new Engine();
-        img = new Texture("badlogic.jpg");
+        img = game.assets.get("enemy.png");
         cam = new OrthographicCamera();
         cam.setToOrtho(false, game.width, game.height);
         renderable = Family.all(PositionComponent.class, TextureComponent.class).get();
