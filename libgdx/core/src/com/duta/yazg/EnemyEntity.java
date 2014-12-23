@@ -6,5 +6,6 @@ public class EnemyEntity extends Entity {
     public EnemyEntity() {
         add(new PositionComponent());
         add(new TextureComponent());
+        add(new SizeComponent());
     }
 }

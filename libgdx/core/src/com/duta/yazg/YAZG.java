@@ -3,7 +3,6 @@ package com.duta.yazg;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,7 +29,7 @@ public class YAZG extends ApplicationAdapter {
 
 	@Override
 	public void resize(int width, int height) {
-		cam.setToOrtho(true, this.width = width, this.height = height);
+		cam.setToOrtho(false, this.width = width, this.height = height);
 	}
 
 	@Override
@@ -45,9 +44,12 @@ public class YAZG extends ApplicationAdapter {
 			EnemyEntity enemy = new EnemyEntity();
 			PositionComponent position = Mappers.position.get(enemy);
 			position.x = Gdx.input.getX();
-			position.y = Gdx.input.getY();
+			position.y = height - Gdx.input.getY() - 1; // Flip y
 			TextureComponent texture = Mappers.texture.get(enemy);
 			texture.texture = img;
+			SizeComponent size = Mappers.size.get(enemy);
+			size.width = 32f;
+			size.height = 32f;
 			engine.addEntity(enemy);
 		}
 	}
@@ -63,7 +65,12 @@ public class YAZG extends ApplicationAdapter {
 		for(Entity entity : engine.getEntitiesFor(renderable)) {
 			PositionComponent position = Mappers.position.get(entity);
 			TextureComponent  texture  = Mappers.texture .get(entity);
-			batch.draw(texture.texture, position.x, position.y, 32, 32);
+			if(Mappers.size.has(entity)) {
+				SizeComponent size = Mappers.size.get(entity);
+				batch.draw(texture.texture, position.x, position.y, size.width, size.height);
+			} else {
+				batch.draw(texture.texture, position.x, position.y);
+			}
 		}
 		batch.end();
 	}
