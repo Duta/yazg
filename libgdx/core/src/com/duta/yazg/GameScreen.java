@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 
 import static com.duta.yazg.Entities.*;
 
@@ -71,13 +72,20 @@ public class GameScreen extends ScreenAdapter {
 
             SpriteComponent sprite = Mappers.sprite.get(enemy);
             sprite.sprite = new Sprite(game.assets.<Texture>get("enemy.png"));
-            sprite.sprite.setBounds(game.touch.x, game.touch.y, 32f, 32f);
+            sprite.sprite.setSize(32f, 32f);
+            sprite.sprite.setOrigin(16f, 16f);
+            sprite.sprite.setCenter(game.touch.x, game.touch.y);
 
             engine.addEntity(enemy);
         }
+        Sprite ps = Mappers.sprite.get(player).sprite;
+        float px = ps.getX();
+        float py = ps.getY();
         for(Entity entity : engine.getEntitiesFor(enemies)) {
-            Sprite sprite = Mappers.sprite.get(entity).sprite;
-            // TODO: Face player
+            Sprite es = Mappers.sprite.get(entity).sprite;
+            float ex = es.getX();
+            float ey = es.getY();
+            es.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(py - ey, px - ex) - 90);
         }
     }
 }
