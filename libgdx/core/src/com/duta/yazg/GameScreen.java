@@ -13,17 +13,19 @@ public class GameScreen extends ScreenAdapter {
     private YAZG game;
     private Texture img;
     private Engine engine;
-    private OrthographicCamera cam;
+//    private Entity player;
     private Family renderable;
+    private OrthographicCamera cam;
 
     public GameScreen(YAZG game) {
         this.game = game;
 
-        engine = new Engine();
         img = game.assets.get("enemy.png");
+        engine = new Engine();
+//        player = Entities.sized(Entities.renderable());
+        renderable = Family.all(PositionComponent.class, TextureComponent.class).get();
         cam = new OrthographicCamera();
         cam.setToOrtho(false, game.width, game.height);
-        renderable = Family.all(PositionComponent.class, TextureComponent.class).get();
     }
 
     @Override
@@ -56,7 +58,7 @@ public class GameScreen extends ScreenAdapter {
             game.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             cam.unproject(game.touch);
 
-            EnemyEntity enemy = new EnemyEntity();
+            Entity enemy = Entities.sized(Entities.renderable());
 
             PositionComponent position = Mappers.position.get(enemy);
             position.x = game.touch.x;
