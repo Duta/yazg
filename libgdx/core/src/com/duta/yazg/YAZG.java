@@ -9,27 +9,26 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 public class YAZG extends ApplicationAdapter {
 	private int width, height;
-	private OrthographicCamera cam;
 	private SpriteBatch batch;
 	private Engine engine;
 	private Texture img;
+	private Vector3 touch;
+	private OrthographicCamera cam;
 	private Family renderable;
 
 	@Override
 	public void create() {
-		cam = new OrthographicCamera();
 		batch = new SpriteBatch();
 		engine = new Engine();
 		img = new Texture("badlogic.jpg");
+		touch = new Vector3();
+		cam = new OrthographicCamera();
+		cam.setToOrtho(false, this.width = 640, this.height = 480);
 		renderable = Family.all(PositionComponent.class, TextureComponent.class).get();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		cam.setToOrtho(false, this.width = width, this.height = height);
 	}
 
 	@Override
@@ -41,15 +40,22 @@ public class YAZG extends ApplicationAdapter {
 	private void update() {
 		engine.update(Gdx.graphics.getDeltaTime());
 		if(Gdx.input.justTouched()) {
+			touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+			cam.unproject(touch);
+
 			EnemyEntity enemy = new EnemyEntity();
+
 			PositionComponent position = Mappers.position.get(enemy);
-			position.x = Gdx.input.getX();
-			position.y = height - Gdx.input.getY() - 1; // Flip y
+			position.x = touch.x;
+			position.y = touch.y;
+
 			TextureComponent texture = Mappers.texture.get(enemy);
 			texture.texture = img;
+
 			SizeComponent size = Mappers.size.get(enemy);
 			size.width = 32f;
 			size.height = 32f;
+
 			engine.addEntity(enemy);
 		}
 	}
