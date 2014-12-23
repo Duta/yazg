@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
+import static com.duta.yazg.Entities.*;
+
 public class GameScreen extends ScreenAdapter {
     private YAZG game;
     private Texture img;
     private Engine engine;
     private Entity player;
-    private Family renderable;
+    private Family renderables, enemies;
     private OrthographicCamera cam;
 
     public GameScreen(YAZG game) {
@@ -22,8 +24,9 @@ public class GameScreen extends ScreenAdapter {
 
         img = game.assets.get("enemy.png");
         engine = new Engine();
-        player = Entities.sized(Entities.renderable());
-        renderable = Family.all(PositionComponent.class, TextureComponent.class).get();
+        player = sized(rotatable(renderable()));
+        renderables = Family.all(PositionComponent.class, TextureComponent.class).get();
+        enemies = Family.all(EnemyComponent.class).get();
         cam = new OrthographicCamera();
 
         PositionComponent position = Mappers.position.get(player);
@@ -55,16 +58,50 @@ public class GameScreen extends ScreenAdapter {
 
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
-        for(Entity entity : engine.getEntitiesFor(renderable)) {
-            PositionComponent position = Mappers.position.get(entity);
-            TextureComponent  texture  = Mappers.texture .get(entity);
-            Gdx.app.log("Render", position.x+","+position.y);
+        for(Entity entity : engine.getEntitiesFor(renderables)) {
+            Texture texture;
+            float x, y, width, height, rotation;
+
+            PositionComponent positionComp = Mappers.position.get(entity);
+            x = positionComp.x;
+            y = positionComp.y;
+
+            TextureComponent textureComp = Mappers.texture.get(entity);
+            texture = textureComp.texture;
+
             if(Mappers.size.has(entity)) {
-                SizeComponent size = Mappers.size.get(entity);
-                game.batch.draw(texture.texture, position.x, position.y, size.width, size.height);
+                SizeComponent sizeComp = Mappers.size.get(entity);
+                width  = sizeComp.width;
+                height = sizeComp.height;
             } else {
-                game.batch.draw(texture.texture, position.x, position.y);
+                width  = textureComp.texture.getWidth();
+                height = textureComp.texture.getHeight();
             }
+            if(Mappers.rotation.has(entity)) {
+                RotationComponent rotationComp = Mappers.rotation.get(entity);
+                rotation = rotationComp.rotation;
+            } else {
+                rotation = 0f;
+            }
+
+            game.batch.draw(
+                    texture,             // Texture
+                    x,                   // X
+                    y,                   // Y
+                    x +  width/2,        // Origin X
+                    y + height/2,        // Origin Y
+                    width,               // Width
+                    height,              // Height
+                    1f,                  // Scale X
+                    1f,                  // Scale Y
+                    rotation,            // Rotation
+                    0,                   // Source X
+                    0,                   // Source Y
+                    texture.getWidth(),  // Source Width
+                    texture.getHeight(), // Source Height
+                    false,               // Flip X?
+                    false                // Flip Y?
+            );
         }
         game.batch.end();
     }
@@ -72,7 +109,7 @@ public class GameScreen extends ScreenAdapter {
     private void centerCamera() {
         PositionComponent position = Mappers.position.get(player);
         SizeComponent     size     = Mappers.size    .get(player);
-        cam.position.set(position.x + size.width /2, position.y + size.height/2, 0);
+        cam.position.set(position.x + size.width/2, position.y + size.height/2, 0);
     }
 
     private void update() {
@@ -81,7 +118,7 @@ public class GameScreen extends ScreenAdapter {
             game.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             cam.unproject(game.touch);
 
-            Entity enemy = Entities.sized(Entities.renderable());
+            Entity enemy = sized(rotatable(renderable(enemy())));
 
             PositionComponent position = Mappers.position.get(enemy);
             position.x = game.touch.x;
@@ -94,9 +131,10 @@ public class GameScreen extends ScreenAdapter {
             size.width  = 32f;
             size.height = 32f;
 
-            Gdx.app.log("Enemy spawn", position.x+","+position.y);
-
             engine.addEntity(enemy);
+        }
+        for(Entity entity : engine.getEntitiesFor(enemies)) {
+            // TODO: Face player
         }
     }
 }
