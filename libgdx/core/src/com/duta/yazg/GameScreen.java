@@ -33,6 +33,7 @@ public class GameScreen extends ScreenAdapter {
         sprite.sprite = new Sprite(game.assets.<Texture>get("player.png"));
         sprite.sprite.setBounds(50f, 50f, 32f, 32f);
 
+        engine.addSystem(new EnemyMovementSystem());
         engine.addEntity(player);
 
         cam.setToOrtho(false, game.width, game.height);
@@ -40,14 +41,15 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        engine.update(delta);
+
         update();
 
         centerCamera();
+        cam.update();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        cam.update();
 
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
@@ -63,18 +65,20 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void update() {
-        engine.update(Gdx.graphics.getDeltaTime());
         if(Gdx.input.justTouched()) {
             game.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             cam.unproject(game.touch);
 
-            Entity enemy = enemy(sprite());
+            Entity enemy = speedy(enemy(sprite()));
 
             SpriteComponent sprite = Mappers.sprite.get(enemy);
             sprite.sprite = new Sprite(game.assets.<Texture>get("enemy.png"));
             sprite.sprite.setSize(32f, 32f);
             sprite.sprite.setOrigin(16f, 16f);
             sprite.sprite.setCenter(game.touch.x, game.touch.y);
+
+            SpeedComponent speed = Mappers.speed.get(enemy);
+            speed.speed = 25f;
 
             engine.addEntity(enemy);
         }
