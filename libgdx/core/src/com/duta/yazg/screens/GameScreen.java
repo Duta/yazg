@@ -46,7 +46,7 @@ public final class GameScreen extends ScreenAdapter {
         engine.addSystem(new SpawnOnTouchSystem(game, cam, engine));
         engine.addSystem(new EnemyMovementSystem());
         engine.addSystem(new EnemyRotationSystem(player));
-        engine.addSystem(new PlayerMovementSystem(player));
+        engine.addSystem(new PlayerMovementSystem(player, game.controls));
         engine.addEntity(player);
 
         cam.setToOrtho(false, game.width, game.height);

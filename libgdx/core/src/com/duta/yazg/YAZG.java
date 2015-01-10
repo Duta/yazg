@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.duta.yazg.screens.LoadingScreen;
 
-public class YAZG extends Game {
+public final class YAZG extends Game {
 	public int width, height;
 	public SpriteBatch batch;
 	public Vector3 touch;
 	public AssetManager assets;
+	public ControlSettings controls;
 
 	@Override
 	public void create() {
@@ -19,6 +20,7 @@ public class YAZG extends Game {
 		height = 480;
 		batch = new SpriteBatch();
 		touch = new Vector3();
+		controls = new ControlSettings();
 		assets = new AssetManager();
 		assets.load("enemy.png",  Texture.class);
 		assets.load("player.png", Texture.class);
