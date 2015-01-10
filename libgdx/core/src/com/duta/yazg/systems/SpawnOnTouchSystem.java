@@ -1,4 +1,4 @@
-package com.duta.yazg;
+package com.duta.yazg.systems;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -7,6 +7,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.duta.yazg.Mappers;
+import com.duta.yazg.YAZG;
+import com.duta.yazg.components.SpeedComponent;
+import com.duta.yazg.components.SpriteComponent;
 
 import static com.duta.yazg.Entities.*;
 

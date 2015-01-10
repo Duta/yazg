@@ -1,4 +1,4 @@
-package com.duta.yazg;
+package com.duta.yazg.screens;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -9,6 +9,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.duta.yazg.Mappers;
+import com.duta.yazg.YAZG;
+import com.duta.yazg.components.SpeedComponent;
+import com.duta.yazg.components.SpriteComponent;
+import com.duta.yazg.systems.EnemyMovementSystem;
+import com.duta.yazg.systems.EnemyRotationSystem;
+import com.duta.yazg.systems.PlayerMovementSystem;
+import com.duta.yazg.systems.SpawnOnTouchSystem;
 
 import static com.duta.yazg.Entities.*;
 

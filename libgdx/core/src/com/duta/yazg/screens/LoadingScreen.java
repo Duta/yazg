@@ -1,9 +1,10 @@
-package com.duta.yazg;
+package com.duta.yazg.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.duta.yazg.YAZG;
 
 public class LoadingScreen extends ScreenAdapter {
     private YAZG game;

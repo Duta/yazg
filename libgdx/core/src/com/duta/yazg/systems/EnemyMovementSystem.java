@@ -1,10 +1,14 @@
-package com.duta.yazg;
+package com.duta.yazg.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.duta.yazg.Mappers;
+import com.duta.yazg.components.EnemyComponent;
+import com.duta.yazg.components.SpeedComponent;
+import com.duta.yazg.components.SpriteComponent;
 
 public class EnemyMovementSystem extends IteratingSystem {
     public EnemyMovementSystem() {

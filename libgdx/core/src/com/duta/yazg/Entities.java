@@ -1,6 +1,9 @@
 package com.duta.yazg;
 
 import com.badlogic.ashley.core.Entity;
+import com.duta.yazg.components.EnemyComponent;
+import com.duta.yazg.components.SpeedComponent;
+import com.duta.yazg.components.SpriteComponent;
 
 public final class Entities {
     private Entities() {}

@@ -1,10 +1,11 @@
-package com.duta.yazg;
+package com.duta.yazg.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.duta.yazg.Mappers;
 
 public class PlayerMovementSystem extends EntitySystem {
     private final Entity player;
