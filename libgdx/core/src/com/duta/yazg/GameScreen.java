@@ -38,6 +38,7 @@ public class GameScreen extends ScreenAdapter {
         speed.speed = 60f;
 
         engine.addSystem(new EnemyMovementSystem());
+        engine.addSystem(new EnemyRotationSystem(player));
         engine.addSystem(new PlayerMovementSystem(player));
         engine.addEntity(player);
 
@@ -94,19 +95,6 @@ public class GameScreen extends ScreenAdapter {
             speed.speed = 25f;
 
             engine.addEntity(enemy);
-        }
-
-        // Grab a reference to the player sprite
-        Sprite ps = Mappers.sprite.get(player).sprite;
-
-        // Make all enemies face the player
-        float px = ps.getX();
-        float py = ps.getY();
-        for(Entity entity : engine.getEntitiesFor(enemies)) {
-            Sprite es = Mappers.sprite.get(entity).sprite;
-            float ex = es.getX();
-            float ey = es.getY();
-            es.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(py - ey, px - ex) - 90);
         }
     }
 }
