@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 
 public class EnemyRotationSystem extends IteratingSystem {
-    private Entity player;
+    private final Entity player;
 
     public EnemyRotationSystem(Entity player) {
         super(Family.all(SpriteComponent.class, EnemyComponent.class).get());

@@ -13,11 +13,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import static com.duta.yazg.Entities.*;
 
 public class GameScreen extends ScreenAdapter {
-    private YAZG game;
-    private Engine engine;
-    private Entity player;
-    private Family sprites, enemies;
-    private OrthographicCamera cam;
+    private final YAZG game;
+    private final Engine engine;
+    private final Entity player;
+    private final Family sprites;
+    private final OrthographicCamera cam;
 
     public GameScreen(YAZG game) {
         this.game = game;
@@ -25,7 +25,6 @@ public class GameScreen extends ScreenAdapter {
         engine = new Engine();
         player = speedy(sprite());
         sprites = Family.all(SpriteComponent.class).get();
-        enemies = Family.all(EnemyComponent.class).get();
         cam = new OrthographicCamera();
 
         SpriteComponent sprite = Mappers.sprite.get(player);
