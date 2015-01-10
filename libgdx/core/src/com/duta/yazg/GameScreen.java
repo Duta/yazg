@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -39,6 +38,7 @@ public class GameScreen extends ScreenAdapter {
         speed.speed = 60f;
 
         engine.addSystem(new EnemyMovementSystem());
+        engine.addSystem(new PlayerMovementSystem(player));
         engine.addEntity(player);
 
         cam.setToOrtho(false, game.width, game.height);
@@ -98,20 +98,6 @@ public class GameScreen extends ScreenAdapter {
 
         // Grab a reference to the player sprite
         Sprite ps = Mappers.sprite.get(player).sprite;
-
-        // Handle player movement input
-        float pspeed = Mappers.speed.get(player).speed * delta;
-        int pxd = 0;
-        int pyd = 0;
-        if(Gdx.input.isKeyPressed(Keys.UP))    pyd++;
-        if(Gdx.input.isKeyPressed(Keys.DOWN))  pyd--;
-        if(Gdx.input.isKeyPressed(Keys.LEFT))  pxd--;
-        if(Gdx.input.isKeyPressed(Keys.RIGHT)) pxd++;
-        if(pxd > 0) ps.setRotation(270f);
-        if(pxd < 0) ps.setRotation( 90f);
-        if(pyd < 0) ps.setRotation(180f + pxd*45f);
-        if(pyd > 0) ps.setRotation(  0f - pxd*45f);
-        ps.translate(pxd * pspeed, pyd * pspeed);
 
         // Make all enemies face the player
         float px = ps.getX();
