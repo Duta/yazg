@@ -9,7 +9,7 @@ import com.duta.yazg.Mappers;
 import com.duta.yazg.components.EnemyComponent;
 import com.duta.yazg.components.SpriteComponent;
 
-public class EnemyRotationSystem extends IteratingSystem {
+public final class EnemyRotationSystem extends IteratingSystem {
     private final Entity player;
 
     public EnemyRotationSystem(Entity player) {

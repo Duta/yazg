@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.duta.yazg.YAZG;
 
-public class LoadingScreen extends ScreenAdapter {
+public final class LoadingScreen extends ScreenAdapter {
     private YAZG game;
     private BitmapFont font;
 

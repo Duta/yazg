@@ -7,7 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.duta.yazg.Mappers;
 
-public class PlayerMovementSystem extends EntitySystem {
+public final class PlayerMovementSystem extends EntitySystem {
     private final Entity player;
 
     public PlayerMovementSystem(Entity player) {

@@ -14,7 +14,7 @@ import com.duta.yazg.components.SpriteComponent;
 
 import static com.duta.yazg.Entities.*;
 
-public class SpawnOnTouchSystem extends EntitySystem {
+public final class SpawnOnTouchSystem extends EntitySystem {
     private final YAZG game;
     private final Camera cam;
     private final Engine engine;

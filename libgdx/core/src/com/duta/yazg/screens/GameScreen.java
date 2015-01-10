@@ -20,7 +20,7 @@ import com.duta.yazg.systems.SpawnOnTouchSystem;
 
 import static com.duta.yazg.Entities.*;
 
-public class GameScreen extends ScreenAdapter {
+public final class GameScreen extends ScreenAdapter {
     private final YAZG game;
     private final Engine engine;
     private final Entity player;

@@ -10,7 +10,7 @@ import com.duta.yazg.components.EnemyComponent;
 import com.duta.yazg.components.SpeedComponent;
 import com.duta.yazg.components.SpriteComponent;
 
-public class EnemyMovementSystem extends IteratingSystem {
+public final class EnemyMovementSystem extends IteratingSystem {
     public EnemyMovementSystem() {
         super(Family.all(SpriteComponent.class, SpeedComponent.class, EnemyComponent.class).get());
     }
