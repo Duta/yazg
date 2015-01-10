@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
 
 import static com.duta.yazg.Entities.*;
 
@@ -37,6 +36,7 @@ public class GameScreen extends ScreenAdapter {
         SpeedComponent speed = Mappers.speed.get(player);
         speed.speed = 60f;
 
+        engine.addSystem(new SpawnOnTouchSystem(game, cam, engine));
         engine.addSystem(new EnemyMovementSystem());
         engine.addSystem(new EnemyRotationSystem(player));
         engine.addSystem(new PlayerMovementSystem(player));
@@ -49,9 +49,6 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         // Process entity systems
         engine.update(delta);
-
-        // General update
-        update(delta);
 
         // Process the camera
         centerCamera();
@@ -73,28 +70,5 @@ public class GameScreen extends ScreenAdapter {
     private void centerCamera() {
         Sprite sprite = Mappers.sprite.get(player).sprite;
         cam.position.set(sprite.getX() + sprite.getWidth()/2, sprite.getY() + sprite.getHeight()/2, 0);
-    }
-
-    private void update(float delta) {
-        // On touch, add an enemy
-        if(Gdx.input.justTouched()) {
-            // Grab the touch position
-            game.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            // Convert to world coordinates
-            cam.unproject(game.touch);
-
-            Entity enemy = speedy(enemy(sprite()));
-
-            SpriteComponent sprite = Mappers.sprite.get(enemy);
-            sprite.sprite = new Sprite(game.assets.<Texture>get("enemy.png"));
-            sprite.sprite.setSize(32f, 32f);
-            sprite.sprite.setOrigin(16f, 16f);
-            sprite.sprite.setCenter(game.touch.x, game.touch.y);
-
-            SpeedComponent speed = Mappers.speed.get(enemy);
-            speed.speed = 25f;
-
-            engine.addEntity(enemy);
-        }
     }
 }
