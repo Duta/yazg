@@ -13,10 +13,7 @@ import com.duta.yazg.Mappers;
 import com.duta.yazg.YAZG;
 import com.duta.yazg.components.SpeedComponent;
 import com.duta.yazg.components.SpriteComponent;
-import com.duta.yazg.systems.EnemyMovementSystem;
-import com.duta.yazg.systems.EnemyRotationSystem;
-import com.duta.yazg.systems.PlayerMovementSystem;
-import com.duta.yazg.systems.SpawnOnTouchSystem;
+import com.duta.yazg.systems.*;
 
 import static com.duta.yazg.Entities.*;
 
@@ -43,10 +40,12 @@ public final class GameScreen extends ScreenAdapter {
         SpeedComponent speed = Mappers.speed.get(player);
         speed.speed = 60f;
 
-        engine.addSystem(new SpawnOnTouchSystem(game, cam, engine));
+        engine.addSystem(new BulletSystem());
         engine.addSystem(new EnemyMovementSystem());
         engine.addSystem(new EnemyRotationSystem(player));
         engine.addSystem(new PlayerMovementSystem(player, game.controls));
+        engine.addSystem(new PlayerShootingSystem(game, player));
+        engine.addSystem(new SpawnOnTouchSystem(game, cam));
         engine.addEntity(player);
 
         cam.setToOrtho(false, game.width, game.height);

@@ -20,12 +20,12 @@ public final class EnemyRotationSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         Sprite ps = Mappers.sprite.get(player).sprite;
-        float px = ps.getX();
-        float py = ps.getY();
+        float px = ps.getX() + ps.getWidth()/2;
+        float py = ps.getY() + ps.getHeight()/2;
 
         Sprite es = Mappers.sprite.get(entity).sprite;
-        float ex = es.getX();
-        float ey = es.getY();
+        float ex = es.getX() + es.getWidth()/2;
+        float ey = es.getY() + es.getHeight()/2;
 
         es.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(py - ey, px - ex) - 90);
     }

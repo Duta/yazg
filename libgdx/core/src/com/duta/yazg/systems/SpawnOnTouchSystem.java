@@ -17,12 +17,21 @@ import static com.duta.yazg.Entities.*;
 public final class SpawnOnTouchSystem extends EntitySystem {
     private final YAZG game;
     private final Camera cam;
-    private final Engine engine;
+    private Engine engine;
 
-    public SpawnOnTouchSystem(YAZG game, Camera cam, Engine engine) {
+    public SpawnOnTouchSystem(YAZG game, Camera cam) {
         this.game = game;
         this.cam = cam;
+    }
+
+    @Override
+    public void addedToEngine(Engine engine) {
         this.engine = engine;
+    }
+
+    @Override
+    public void removedFromEngine(Engine engine) {
+        this.engine = null;
     }
 
     @Override
